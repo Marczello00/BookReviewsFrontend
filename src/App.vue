@@ -2,17 +2,12 @@
 import {ref} from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
 import Menu from './components/Menu.vue'
-const loggedIn =false
-const token=''
-const username=''
 </script>
 
 <template>
   <header>
         <div>
-          <Menu
-          :loggedIn="loggedIn"
-          :username="username" />
+          <Menu/>
         </div>
   </header>
   <RouterView />

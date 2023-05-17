@@ -1,38 +1,60 @@
 <template>
   <div class="container">
-  <form @submit.prevent="login(email, password)">
-    <input type="text" placeholder="Email" v-model="email"> <br>
-    <input type="password" placeholder="Hasło" v-model="password"><br>
-    <button type="submit" >Zaloguj</button>
-  </form></div>
+    <form @submit.prevent="login(email, password)">
+      <input type="mail" placeholder="Email" v-model="email"> <br>
+      <input type="password" placeholder="Hasło" v-model="password"><br>
+      <button type="submit">Zaloguj</button>
+      <p v-if="errorCode == 1">Zabroniony dostęp!</p>
+      <p v-if="errorCode == 2">Błąd połączenia z serwerem!</p>
+      <p v-if="errorCode == 3">Niepoprawny login lub hasło!</p>
+      <p v-if="errorCode == 4">Nie znaleziono!</p>
+    </form>
+  </div>
 </template>
   
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { account } from '../store/account.js'
 const router = useRouter()
-const email=ref('')
-const password=ref('')
+const email = ref('')
+const password = ref('')
+const errorCode = ref(0)
 const login = async (email, password) => {
-  console.log(email + ' ' + password)
-  //router.push('/')
-  try{
-  const response = await fetch("http://localhost:8080/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin":"*",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      });
-      const data = await response.json();
-      console.log(data);}
-      catch(error){
-        console.log(error)
-      }
+  try {
+    const response = await fetch("http://localhost:8080/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    });
+    const data = await response.json();
+    switch (data.status) {
+      case 401:
+        errorCode.value = 1
+        break;
+      case 403:
+        errorCode.value = 3
+        break;
+      case 404:
+        errorCode.value = 4
+        break;
+    }
+    if (data.token) {
+      account.LogIn(email, data.token)
+      router.push('/')
+      errorCode.value = 0
+    }
+  }
+  catch (error) {
+    console.log(error)
+    errorCode.value = 2
+  }
 }
 console
 </script>
@@ -46,10 +68,12 @@ console
   align-items: center;
   margin-top: 50px;
 }
-form{
+
+form {
   display: block;
 }
-input{
+
+input {
   margin: 5px;
 }
 </style>
