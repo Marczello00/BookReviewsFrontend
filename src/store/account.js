@@ -1,5 +1,4 @@
 import {reactive}  from 'vue'
-import router from '../router'
 export const account = reactive({
     email: '',
     isLoggedIn: false,
