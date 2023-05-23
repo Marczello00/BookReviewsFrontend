@@ -33,5 +33,6 @@ import Menu from './components/Menu.vue'
 .grid-content {
   border-radius: 4px;
   min-height: 36px;
-}</style>
+}
+</style>
 
