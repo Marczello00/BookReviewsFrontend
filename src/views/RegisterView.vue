@@ -119,9 +119,9 @@ input {
   display: flex;
   justify-content: center;
 }
-div{
+/* div{
   border-width: 0.5px;
   border-color: red;
   border-style: solid;
-}
+} */
 </style>

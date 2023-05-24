@@ -1,7 +1,8 @@
 <template>
   <div class="container">
     <form @submit.prevent="login(email, password)">
-      <input type="mail" placeholder="Email" v-model="email"> <br>
+      <input type="mail" @input="checkMail" placeholder="Email" v-model="email"> <br>
+      <div v-show="errorMail==1">Niepoprawny adres</div>
       <input type="password" placeholder="Hasło" v-model="password"><br>
       <button type="submit">Zaloguj</button>
       <p v-if="errorCode == 1">Zabroniony dostęp!</p>
@@ -20,6 +21,10 @@ const router = useRouter()
 const email = ref('')
 const password = ref('')
 const errorCode = ref(0)
+const errorMail=ref(0)
+const checkMail = ()=>{
+  email.value!=''?(/^[^@]+@\w+(\.\w+)+\w$/.test(email.value)?errorMail.value=0:errorMail.value=1):errorMail.value=0
+}
 const login = async (email, password) => {
   try {
     const response = await fetch("http://localhost:8080/api/auth/login", {
