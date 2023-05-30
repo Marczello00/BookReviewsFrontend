@@ -1,21 +1,21 @@
 <template>
     <el-row>
       <el-col
-        v-for="(o, index) in 2"
+        v-for="(item, o) in data"
         :key="o"
         :span="8"
-        :offset="index > 0 ? 2 : 0"
+        :offset="1"
       >
-        <el-card :body-style="{ padding: '0px' }">
+        <el-card :body-style="{ padding: '10px' }">
           <img
-            src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+          src="../assets/img/book.jpg"
             class="image"
           />
           <div style="padding: 14px">
-            <span>Yummy hamburger</span>
+            <span>{{item.title}}</span>
             <div class="bottom">
-              <time class="time">{{ currentDate }}</time>
-              <el-button text class="button">Operating</el-button>
+              <time class="time">{{ item.author }}</time>
+              <el-button text class="button">Napisz opinię</el-button>
             </div>
           </div>
         </el-card>
@@ -25,8 +25,9 @@
   
   <script lang="ts" setup>
   import { ref } from 'vue'
-  
-  const currentDate = ref(new Date())
+  const props=defineProps(['data'])
+  const data=ref(props.data)
+  //console.log(data.value)
   </script>
   
   <style>
