@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <form @submit.prevent="preRegister(name, surname, email, password)">
+    <form @submit.prevent="register(name, surname, email, password)">
       <div><input type="text" @input="checkName" placeholder="Imię" v-model="name"></div>
       <div v-show="errorName==1">Pole nie może być puste</div>
       <div><input type="text" @input="checkSurname" placeholder="Nazwisko" v-model="surname"></div>
@@ -16,6 +16,7 @@
       <p v-if="errorCode == 3">Niepoprawne hasło!</p>
       <p v-if="errorCode == 4">Nie znaleziono!</p>
       <p v-if="errorCode == 5">Błąd wenętrzny serwera</p>
+      <p v-if="errorCode == 5">Email jest już zajęty</p>
       <p v-if="errorBefore == 1">Hasła się nie zgadzają!</p>
     </form>
   </div>
@@ -56,7 +57,7 @@ const preRegister=(name, surname, email, password)=>{
 const register = async (name, surname, email, password) => {
   try {
     console.log(name, surname, email, password)
-    const response = await fetch("http://localhost:8080/api/auth/register", {
+    const response = await fetch(account.registerUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -86,7 +87,7 @@ const register = async (name, surname, email, password) => {
     }
     if (data.token) {
       account.LogIn(email, data.token)
-      //router.push('/')
+      router.push('/')
       console.log('registered')
       errorCode.value = 0
     }
